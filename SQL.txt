@@ -1,0 +1,17 @@
+** add foreign key
+ALTER TABLE [dbo].[EmployeeTable]  WITH CHECK ADD FOREIGN KEY([DepartmentId])
+REFERENCES [dbo].[DepartmentTable] ([ID])
+GO
+
+** remove primary key // or drop column
+Alter Table [Table Name]
+    DROP Column [Column Name]
+
+** update column values
+update TBALENAME
+set ID=1
+where Name = 'Rehan';
+
+** change column to not null
+ALTER TABLE table_name
+ALTER COLUMN col_name data_type NOT NULL;

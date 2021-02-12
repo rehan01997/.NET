@@ -1,0 +1,1137 @@
+** this and base
+	The this keyword refers to the current instance of the class 
+	base keyword is used to access members of the base class from within a derived class
+** NULL ??
+pagenumber ?? 1 ;   //if null value is 1
+
+** method overriding => base-     public virtual void abc() {}
+			derived - public override void abc() {}
+
+** Data abstraction - way of hiding features
+The abstract keyword is used for classes and methods:
+
+Abstract class: is a restricted class that cannot be used to create objects (to access it, it must be inherited from another class).
+Abstract method: can only be used in an abstract class, and it does not have a body. The body is provided by the derived class (inherited from).
+
+**interface
+An interface is a completely "abstract class", which can only contain abstract methods and properties (with empty bodies):
+interface Training1
+    {
+        void technology();
+    }
+    interface Training2
+    {
+        void technology();
+    }
+    class TrainingTechnology : Training1,Training2
+    {
+        public TrainingTechnology() { }
+        void Training1.technology()
+        {
+            Console.WriteLine(".NET1");
+        }
+        void Training2.technology()
+        {
+            Console.WriteLine(".NET2");
+        }
+    }
+main{
+            Training1 obj1 = new TrainingTechnology();
+            obj1.technology();
+            Training2 ob2 = new TrainingTechnology();
+            ob2.technology();
+}
+
+*** Inner Exception
+static void genException()
+        {
+            try
+            {
+                int a1 = 0;
+                int b1 = 1/a1;
+            }
+            catch( Exception e1)
+            {
+                try
+                {
+                    int a2 = 0;
+                    int b2 = 1 / a2;
+                }
+                catch( Exception e2 )
+                {
+                    throw new Exception(e1.Message , e2); 
+                }
+            }
+        }
+        static void Main(string[] args)
+        {
+            try
+            {
+                genException();
+            }
+            catch( Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine(ex.InnerException.Message);
+                }
+            }
+        }
+*** Custom Exception
+class CustomExAge : Exception
+    {
+        public CustomExAge() { }
+        public CustomExAge(string msg) : base(msg) { }
+    }
+class Program
+{
+  static int checkAge()
+        {
+            int res = Convert.ToInt32(Console.ReadLine());
+            if (res < 18)
+            {
+                throw new CustomExAge("Age should not be less than 18");
+            }
+            return res;
+        }
+ static void Main(string[] args)
+        {
+            try
+            {
+                Console.WriteLine("Enter Age : ");
+                int res = checkAge();
+                //Console.WriteLine(res);
+            }
+            catch( CustomExAge exp )
+            {
+                Console.WriteLine(exp.Message);
+            }
+       }
+}
+*** Static Value
+Static variables are used for defining constants because their values can be retrieved by invoking the class without creating an instance of it. Static variables can be initialized outside the member function or class definition. You can also initialize static variables inside the class definition.
+
+*** Design Pattern
+Design patterns are reusable solutions to the problems that we encounter in the day to day programming. 
+Types of Design Patterns : 
+ 
+Creational design patterns : These patterns deal with object creation and initialization. Creational pattern gives the program more flexibility in deciding which objects need to be created for a given case.
+ Examples of Creational design patterns category : Singleton , Factory and Abstract Factory etc.
+
+Structural design patterns : This pattern deals with class and object composition. In simple words, This pattern focuses on decoupling interface, implementation of classes and its objects. 
+Examples of Structural design patterns category : Adapter,  Facade and Bridge etc.
+
+Behavioural design patterns : These patterns deal with communication between Classes and objects. 
+Examples of Behavioural design patterns : Chain of Responsibility, Command and Interpreter etc.					
+
+
+** Singleton : Singleton design pattern is used when we need to ensure that only one object of a particular class is Instantiated. That single instance created is responsible to coordinate actions across the application. 
+   sealed is used to avoid inheritance either by nested class or outside class.
+class Singleton
+    {
+        public static int counter = 0;
+        public Singleton()
+        {
+            counter++;
+            Console.WriteLine("Counter Value : " + counter.ToString());
+        }
+        public void printDetails( string str)
+        {
+            Console.WriteLine(str);
+        }
+    }
+class Program
+    {
+        static void Main(string[] args)
+        {
+            Singleton employee = new Singleton();
+            employee.printDetails("This is Employee");
+
+            Singleton department = new Singleton();
+            department.printDetails("this is Department");
+        }
+    }
+O/P : Counter Value : 1
+This is Employee
+Counter Value : 2
+this is Department
+
+** public sealed class Singleton2
+    {
+        public static int counter = 0;
+        public static Singleton2 instance = null;
+        public static Singleton2 GetInstance
+        {
+            get
+            {
+                if (instance == null)
+                    instance = new Singleton2();
+                return instance;
+            }
+        }
+        public Singleton2()
+        {
+            counter++;
+            Console.WriteLine("Counter Value : " + counter.ToString());
+        }
+        public void printDetails(string str)
+        {
+            Console.WriteLine(str);
+        }
+    }
+class Program
+    {
+        static void Main(string[] args)
+        {
+            Singleton2 student = Singleton2.GetInstance;
+            student.printDetails("This is student");
+
+            Singleton2 college = Singleton2.GetInstance;
+            college.printDetails("This is college");
+        }
+    }
+O/P : 
+Counter Value : 1
+This is student
+This is college
+
+*** Factory design Pattern : Factory Method is a Design Pattern which defines an interface for creating an object but lets the classes that implement the interface decide which class to instantiate. 
+class Program
+    {
+    interface I1
+    {
+        string getFirstName();
+        string getLastName();
+    }
+    class Student : I1
+    {
+        public string getFirstName()
+        {
+            return "Student's First Name";
+        }
+        public string getLastName()
+        {
+            return "Student's Last Name";
+        }
+    }
+    class Teacher : I1
+    {
+        public string getFirstName()
+        {
+            return "Teacher's First Name";
+        }
+        public string getLastName()
+        {
+            return "Teacher's Last Name";
+        }
+    }
+    // factory object
+    class CreateObj
+    {
+        public static I1 getObj( string typeofobj)
+        {
+            I1 obj = null;
+            if( typeofobj.ToLower() == "student" )
+            {
+                obj = new Student();
+            }
+            else
+            {
+                obj = new Teacher();
+            }
+            return obj;
+        }
+    }
+        static void Main(string[] args)
+        {
+             //Factory Design Pattern
+            //Student s = new Student();			// Now we will not use
+            //Console.WriteLine(s.getFirstName().ToString());
+
+            Console.WriteLine("Enter your Object Type");
+            string type = Console.ReadLine();
+            I1 obj = CreateObj.getObj(type);
+            Console.WriteLine(obj.getFirstName());
+            Console.WriteLine(obj.getLastName());
+        }
+    }
+
+*** Builder Design pattern : This pattern is used to build a complex object by using a step by step approach. it is used to construct a complex object step by step and the final step returns the object. 
+ public interface IBuilder
+    {
+        void build1();
+        void build2();
+        Product GetProductObj();
+    }
+    public class Product
+    {
+        public string part1 { get; set; }
+        public string part2 { get; set; }
+        public void ShowInfo()
+        {
+            Console.WriteLine(part1);
+            Console.WriteLine(part2);
+        }
+    }
+    public class CreateBuilderA : IBuilder
+    {
+        private Product prod = new Product();
+        public void build1()
+        {
+            prod.part1 = "PART-A1";  
+        }
+        public void build2()
+        {
+            prod.part2 = "PART-A2";
+        }
+        public Product GetProductObj()
+        {
+            return prod;
+        }
+    }
+    public class CreateBuilderB : IBuilder
+    {
+        private Product prod = new Product();
+        public void build1()
+        {
+            prod.part1 = "PART-B1";
+        }
+        public void build2()
+        {
+            prod.part2 = "PART-B2";
+        }
+        public Product GetProductObj()
+        {
+            return prod;
+        }
+    }
+    //Builder
+    public class Builder
+    {
+        private IBuilder interfaceObj;
+        public Builder(IBuilder interfaceObj)
+        {
+            this.interfaceObj = interfaceObj;
+        }
+        public void GetProduct()
+        {
+            interfaceObj.build1();
+            interfaceObj.build2();
+        }
+        public Product GetBuilderObject()
+        {
+            return interfaceObj.GetProductObj();
+        }
+    }
+  static void Main(string[] args)
+        {
+            //Builder Design
+            Builder builderObj1 = new Builder(new CreateBuilderA());
+            builderObj1.GetProduct();
+            var product1 = builderObj1.GetBuilderObject();
+            product1.ShowInfo();
+
+            Console.WriteLine("----------------------------");
+            Builder builderObj2 = new Builder(new CreateBuilderB());
+            builderObj2.GetProduct();
+            var product2 = builderObj2.GetBuilderObject();
+            product2.ShowInfo();
+        }
+    }
+
+*** GENERICS
+        MyClass<T> 	------>	MyClass<int>
+		------>	MyClass<string>
+class Compare<T>
+    {
+        public bool checkEquals(T firstEle, T secondEle)
+        {
+            if (firstEle.Equals(secondEle)) return true;
+            return false;
+        }
+        public bool CheckArrays( T[] array1 , T[] array2 )
+        {
+            if (array1.SequenceEqual(array2)) return true;
+            return false;
+        }
+    }   
+class Program
+    {
+        static void Main(string[] args)
+        {
+            //Generics
+            Compare<string> obj1 = new Compare<string>();
+            bool ans1 = obj1.checkEquals("efs", "abc");
+            if (ans1) { Console.WriteLine("True"); }
+            else { Console.WriteLine("False"); }
+        }
+    }
+*** IEnumerable  : ENUMERABLE in C# is an interface that defines one method, GetEnumerator which returns an IEnumerator interface. This allows readonly access to a collection then a collection that implements IEnumerable can be used with a for-each statement.
+*** LINQ : Language Integrated Query Language enables you to query the data from the various sources like SQL database, Web Services, ADO datasets, XML dataset, and objects.
+class Program
+    {
+        class Employee
+        {
+           public string employeeName;
+           public int salary;
+         }
+        static void Main(string[] args)
+        {
+            // LinQ
+            Console.WriteLine("------------------------");
+            Employee[] emp =
+            {
+                new Employee{ employeeName = "Rehan" , salary = 2000 },
+                new Employee{ employeeName = "Naveen" , salary = 4000 },
+                new Employee{ employeeName = "saurabh" , salary = 6000 }
+            };
+            IEnumerable<string> empobj = from i in emp where i.salary >= 4000 orderby i.salary select i.employeeName;
+            foreach (string output in empobj)
+            {
+                Console.WriteLine(output);
+            }
+        }
+    }
+
+*** ENTITY FRAMEWORK
+DATAFIRST : 
+1) open object Express  --> go to database --> tables --> add tables --> make script and update database
+2) Package Manager Console : install-package EntityFramework
+2) click on  project-> add item --> form database -> microsft sql server -> .\SQLEXPRESS(server name)  -> click tables --> click ok // files are created
+3) class Program
+    {
+        static void Main(string[] args)
+        {
+            var context = new MyFirstDataBaseEntities();
+            var post = new Table()
+            {
+                Body = "Rehan",
+                DatePublished = DateTime.Now,
+                Title = "Title",
+                PostId = 1
+            };
+            context.Tables.Add(post);
+            context.SaveChanges();
+        }
+    }
+
+CODEFIRST:
+1) Package Manager Console : install-package EntityFramework
+2) program.cs
+public class postTable
+    {
+        public int PostId { get; set; }
+        public DateTime DataPublished { get; set; }
+        public string Title { get; set; }
+        public string Body { get; set; }
+    }
+    public class CodeFirstDataBaseEntities : DbContext
+    {
+        public DbSet<postTable> Tables { get; set; }
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+        }
+    } 
+3) App.config
+<connectionStrings>
+	<add name="CodeFirstDataBaseEntities" connectionString="data source=.\SQLEXPRESS; initial catalog=Day6._1; integrated security=SSPI" providerName="System.Data.sqlClient "/>
+</connectionStrings>
+4) Package manager console :    1)  enable-migrations
+			2) add-migration CreatePost     //it will create a createpost.cs
+			2)  update-Database
+Advantage of Code first :  Full versioning of database , Productivity
+
+*** Lazy Loading :
+1 ) create database
+2) add tables1 = Employee ( ID, FirstName, LastName, Salary , Gender , departmentId( foreign key)
+3) add tables2 = Department( ID(foreign key) ,Name , Location)
+4) add item ---> linqtoSql ---> name it EmpContext.
+5) Move both the tables in EmpContext by dragging both.
+5) class Program
+    {
+        static void Main(string[] args)
+        {
+            using( var context = new EmpContextDataContext() )
+            {
+                foreach( DepartmentTable dept in context.DepartmentTables)
+                {
+                    Console.WriteLine(dept.Name);
+                    Console.WriteLine("----------------");
+                    foreach ( EmployeeTable emp in dept.EmployeeTables )
+                    {
+                        Console.WriteLine(emp.FirstName + " " + emp.LastName);
+                    }
+                    Console.WriteLine("-----------------");
+                }
+            }
+        }
+    }
+O/p : 
+HR 
+ Mohd Rehan
+ Anand Kumar
+IT
+ Saurabh Arya
+ Raghav Khanna
+
+*** Early Loading : 
+1) create console.Framework
+2) add item --> linqtoSql --> name it EmpDept.cs
+3) add both tables DepartmentTables and Employeetables to LINQ.
+4) using System.data.linq;
+            using( var dbContext = new EmpDeptDataContext())
+            {
+                // 1. Eager Loading 1
+                DataLoadOptions loadoptions = new DataLoadOptions();
+                loadoptions.LoadWith<DepartmentTable>(d => d.EmployeeTables);
+                dbContext.LoadOptions = loadoptions;
+
+                // 2 . Eager Loading 2
+                var linqQuery = from dept in dbContext.DepartmentTables
+                                select new { Name = dept.Name, Loction = dept.Location };
+
+                foreach( DepartmentTable dept in dbContext.DepartmentTables)
+                {
+                    Console.WriteLine(dept.Name);
+                    foreach( EmployeeTable emp in dept.EmployeeTables)
+                    {
+                        Console.WriteLine(emp.FirstName + "  " + emp.LastName);
+                    }
+                }
+             }
+
+*** RAZOR : WEB app
+https://docs.microsoft.com/en-us/aspnet/core/mvc/razor-pages
+1) Create a new project
+2) Create a new project from the start window
+3) Select ASP.NET Core Web Application, and then select Next.
+4) Create a new ASP.NET Core web application dialog, select: .NET Core and ASP.NET Core 5.0 in the dropdowns.
+Press Ctrl+F5 to run without the debugger.
+
+6) NOT IMP:
+public class IndexModel : PageModel
+    {
+        private readonly ILogger<IndexModel> _logger;
+        public string Message { get; set; }
+        public IndexModel(ILogger<IndexModel> logger)
+        {
+            _logger = logger;
+        }
+        public void OnGet()	// what is here can be used in html pages using @Model.Message
+        {
+            Message = "Hello World!";
+        }
+    }
+index.html : <h1 class="display-4">@Model.Message</h1>
+
+*** ASP.MVC( model view controller )
+--> Model - make diff diff models
+--> view - 
+--> controller - recieves request and handles, selects model , select views
+
+*** CRUD operations( Create , Read, Update, Delete ) in Razor:
+1) 
+  CREATE TABLE [dbo].[tblEmployee](
+  [EmployeeId] [int] IDENTITY(1,1) NOT NULL,
+  [Name] [nvarchar](50) NULL,
+  [Gender] [nvarchar](10) NULL,
+  [City] [nvarchar](50) NULL,
+  [Department] [nvarchar](50) NULL,
+  PRIMARY KEY CLUSTERED
+  (
+  [EmployeeId] ASC
+  )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+  ) ON [PRIMARY]
+2) Create without mvc
+3) Create folder 'models' - add TABLENAME.cs
+4) In TABLENAME.cs
+public class TblEmployee
+    {
+        [Key]
+        public int EmployeeId { get; set; }
+        public string Name { get; set; }
+        public string Gender { get; set; }
+        public string City { get; set; }
+        public string Department { get; set; }
+    }
+4) On Pages --> Add razor page  ---> click CRUD options  ---> write TABLENAME.cs ANd EmployeeContext --> click ADD
+5) In appsetting.json -> 
+   "ConnectionStrings": {
+    "EmployeeContext": "Server=UNTHINKABLE-LAP\\SQLEXPRESS;Database=EmployeeDepartmentDatabase2;Trusted_Connection=True;MultipleActiveResultSets=true"
+  }
+2ND WAY : CRUD - .net mvc  
+1) Create database EmployeeDepartmentDatabase ---> Table - Department ---> ID , Name, Location
+2) In Models folder 
+	2.1) Add Department.cs --> 
+		public class Department
+  		  {
+       		      [Key]
+                                            public int ID { get; set; }
+  	                         public string Name { get; set; }
+      		      public string Location { get; set; }
+  		  }
+	2.2) Add DepartmentContext.cs  -->
+	 	     public class DepartmentContext : DbContext
+  		     {
+       		         public DepartmentContext(DbContextOptions<DepartmentContext> options) : base(options)
+      		           {
+
+      		           }
+       		         public DbSet<Day8.Models.Department> Department { get; set; }
+		     }
+3) In Controllers folder -- > Add DepartmentController.cs  -->
+	 public class DepartmentController : Controller
+                    {
+        	     private readonly DepartmentContext _db;
+                        public DepartmentController( DepartmentContext Db)
+                        {
+                           _db = Db;
+                        }
+      	      public IActionResult Department()
+                        {
+  	           try
+        		{
+             	                       var dptList = _db.Department.ToList();
+                                          return View(dptList);
+        		}
+                             catch (Exception)
+                                    {
+                                          return View();
+           	                  }            
+      	      }
+    	}
+4) TO ADD VIEW : In departmentController.cs ---> right click to add view --> Click razor --> in View name : Department , Template : Create/Edit/Delete/ ,Model Class : Department.cs
+5) in appSetting.json --->
+  {
+  "AllowedHosts": "*",
+  "ConnectionStrings": {
+    "AppCon": "Data Source=UNTHINKABLE-LAP\\SQLEXPRESS; Initial Catalog=EmployeeDepartmentDataBase; Trusted_Connection=True;MultipleActiveResultSets=true"
+  }
+ }
+6) In startup.cs -->
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddControllersWithViews();
+            services.AddDbContext<DepartmentContext>(options =>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("AppCon"));
+            });
+        }
+         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Department}/{action=Department}/{id?}"); 	// Controller Name , DataBase tableName
+            });
+        }
+	
+
+*** PARALLEL PROGRAMMING
+
+class Program
+    {
+        static void Main(string[] args)
+        {
+            Program p = new Program();
+            p.parallel1();
+            console.writeline("-------------------------------");
+
+            p.parallel2();
+            console.writeline("-------------------------------");
+
+            p.parallel3();
+            console.writeline("-------------------------------");
+
+            p.parallel4();
+
+            Console.ReadKey();
+        }
+        public void doOtherWork( int id , int sleep )
+        {
+            Console.WriteLine("Other Task {0} begins", id);
+            Thread.Sleep(sleep);
+            Console.WriteLine("Other Task {0} is completed" , id);
+        }
+        public void doWork(int id, int sleep)
+        {
+            Console.WriteLine("Task {0} begins", id);
+            Thread.Sleep(sleep);
+            Console.WriteLine("Task {0} is completed" , id);
+        }
+        public void parallel1()
+        {
+            var t1 = new Task(() => doWork(1, 1000));
+            t1.Start();
+            var t2 = new Task(() => doWork(2, 2000));
+            t2.Start();
+            var t3 = new Task(() => doWork(3, 3000));
+            t3.Start();
+        }
+
+        public void parallel2()
+        {
+            Task t1 = Task.Factory.StartNew(() => doWork(1, 1000)).ContinueWith((prev) => doOtherWork(1, 1000));	// to continue next task after prev done.
+            Task t2 = Task.Factory.StartNew(() => doWork(2, 2000));
+            Task t3 = Task.Factory.StartNew(() => doWork(3, 3000));
+        }
+
+        public void parallel3()
+        {
+            // to print all numbers from 0 to 100 with a gap of 10 sec // but completed in 1 sec
+            Parallel.For(0, 10, i =>
+            {
+                Console.WriteLine("i : {0}", i);
+                Thread.Sleep(1000);
+            });
+        }
+
+        // to get number of primes 
+        public bool isPrimes(  long value )
+        {
+            int pr = 0;
+            for( long div = 2; div*div <= value; div++)
+            {
+                if (value % div == 0) pr ++;
+            }
+            if (pr == 0) return false;
+            return true;
+        }
+        public int getPrimes( long minValue , long maxValue )
+        {
+            int count = 0;
+            for( long i = minValue; i < maxValue; i++)
+            {
+                if (isPrimes(i)) count += 1;
+            }
+            return count;
+        }
+        public void parallel4()
+        {
+            int numParts = 10;
+            Parallel.For(0, numParts, i =>
+            {
+                Console.WriteLine(getPrimes(i == 0 ? 2 : i * 1000000 + 1, (i + 1) * 1000000));
+            });
+        }
+        // To set degree of parallelism
+        public void parallel5()
+        {
+            var options = new ParallelOptions()
+            {
+                MaxDegreeOfParallelism = 2
+            };
+            var sw1 = new Stopwatch(); sw1.Start();
+            int numParts = 10;
+            Parallel.For(0, numParts, options, i =>
+            {
+                Console.WriteLine(getPrimes(i == 0 ? 2 : i * 100000 + 1, (i + 1) * 100000));
+            });
+            Console.WriteLine("Time Elapses by Parallel Programming using ParallelOptions : {0}", sw1.ElapsedMilliseconds);
+        }
+    }
+
+*** Synchronous Programming : 
+With Synchronous your application will run all tasks in sequence. In other words, you fire the execution of each task and then wait until it finishes before firing the next one.
+Synchronous might stop the user interface (UI) thread.Asynchronous eliminates disadvantages of Synchronous. It won’t hang the UI thread . When executing asynchronously, the program doesn’t run all tasks in sequence: it fires the tasks and then waits for their end.
+
+*** Asynchronous( parallel programming ) , Await
+	-- async , await keyword
+ async  --> writing the Async method:
+                          1) The method signature must have the async keyword.
+	       2)The method name should end with Async (this is not enforced, but it is a best practice).        // public async solveAsync() {    return await func(); }
+	       3)The method should return Task, Task<T>, or void.				        // public async Task<int> func () {   return await Task.Factory.StartNew( () => {  a = b; })   }
+await  --> waits till the function completes
+
+ class Program
+    {
+        static async Task Main(string[] args)
+        {
+            Program p = new Program();
+            await p.solveAsync();
+
+            Console.ReadKey();
+        }
+        public bool isPrimes(int value)
+        {
+            int pr = 0;
+            for (int div = 2; div * div <= value; div++)
+            {
+                if (value % div == 0) pr++;
+            }
+            if (pr == 0) return false;
+            return true;
+        }
+        public async Task<List<int>> getPrimesAsync(int minValue, int maxValue)
+        {
+            List<int> result = new List<int>();
+
+            return await Task.Factory.StartNew(() =>
+            {
+               for (int i = minValue; i < maxValue; i++)
+               {
+                   if (isPrimes(i)) result.Add(i);
+               }
+               return result;
+           });            
+        }
+        public async Task solveAsync()
+        {
+            int numPrts = 10;
+            Task<List<int>>[] primes = new Task<List<int>>[numPrts];
+
+            for (int i = 0; i < numPrts; i++)
+            {
+                primes[i] = getPrimesAsync(i == 0 ? 2 : (i * 10000) + 1, (i + 1) * 10000);
+            }
+            var results = await Task.WhenAll(primes);
+            Console.WriteLine("Total primes numbers : {0}", results.Sum(p => p.Count));           
+        }
+    }
+*** Parallel - Linq ( plinq)
+ class City  
+    {  
+        public int Id { get; set; }   
+        public string   CityName { get; set; }    
+        public string Country { get; set; }  
+    }  
+var cities = new[] {  
+                new City { Id = 1,  CityName = "Turku"  , Country = "Finland" },  
+                new City { Id = 2,  CityName = "Paris"  , Country = "France" },  
+                new City { Id = 3,  CityName = "Oslo"    ,  Country = "Norway" } ,  
+                new City { Id = 4,  CityName = "Helsinki"     , Country = "Finland" },  
+  
+                new City { Id = 5,  CityName = "Turku"  , Country = "Finland" },  
+                new City { Id = 6,  CityName = "Paris"  , Country = "France" },  
+                new City { Id = 7,  CityName = "Oslo"    ,  Country = "Norway" } ,  
+                new City { Id = 8,  CityName = "Helsinki"     , Country = "Finland" } ,  
+  
+                new City { Id = 9,  CityName = "Turku"  , Country = "Finland" },  
+                new City { Id = 10,  CityName = "Paris"  , Country = "France" },  
+                new City { Id = 11,  CityName = "Oslo"    ,  Country = "Norway" } ,  
+                new City { Id = 12,  CityName = "Helsinki"     , Country = "Finland"},  
+  
+                new City { Id = 13,  CityName = "Turku"  , Country = "Finland" },  
+                new City { Id = 14,  CityName = "Paris"  , Country = "France" },  
+                new City { Id = 15,  CityName = "Oslo"    ,  Country = "Norway" } ,  
+                new City { Id = 16,  CityName = "Helsinki"     , Country = "Finland"},  
+  
+                new City { Id = 17,  CityName = "Turku"  , Country = "Finland" },  
+                new City { Id = 18,  CityName = "Paris"  , Country = "France" },  
+                new City { Id = 19,  CityName = "Oslo"    ,  Country = "Norway" } ,  
+                new City { Id = 20,  CityName = "Helsinki"     , Country = "Finland"}  
+             };  
+// Synchronous programming :
+var finCities = cities.Where(c => c.Country == "Finland");  
+
+//Asynchronous Programming :
+var finCities = cities.AsParallel().Where(c => c.Country == "Finland");  
+
+//Asynchronous Programming - to print in order 
+var finCities = cities.AsParallel().AsOrdered().Where(c => c.Country == "Finland"); 
+                                          
+ foreach (City city in finCities)  
+        Console.WriteLine(city.CityName);  		O/P : helskinsi , Turku , Helski...
+
+*** WEB API
+
+What is ASP.NET Web API ?
+The term API stands for ‘Application Programming Interface’. ASP.NET Web API is a framework for building Web API’s, i.e. HTTP based services on top of the .NET Framework. The most common use case for using Web API is for building RESTful services. These services can then be consumed by a broad range of clients like
+1. Browsers
+2. Mobile applications
+3. Desktop applications
+4. IOTs
+
+What are IOTs
+The term IOTs stands for Internet Of Things. Internet Of Things are the objects or devices that have an IP address and can communicate over the internet with other internet enabled devices and objects. Examples for IoT include security systems, electronic appliances, thermostats, cars etc..., in addition to desktops, laptops, and smart phones.
+
+One important thing to keep in mind is that, though ASP.NET Web API framework is widely used to create RESTful services, it can also be used to create services that are not RESTful. In short, ASP.NET Web API framework does not dictate any specific architeture style for creating services. In this video, we will discuss creating RESTful services from scratch using ASP.NET Web API framework.
+
+What are RESTful services
+REST stands for Representational State Transfer. REST was first introduced in the year 2000 by Roy Fielding as part of his doctoral dissertation. REST is an architectural pattern for creating an API that uses HTTP as its underlying communication method. The REST architectural pattern specifies a set of constraints that a system should adhere to. Here are the REST constraints.
+
+1. Client Server constraint
+2. Stateless constraint
+3. Cacheable constraint
+4. Uniform Interface
+
+Another concept related to Uniform Interface is HATEOAS. HATEOAS stands for Hypermedia as the Engine of Application State. All this means is that in each request there will be set of hyperlinks that let's you know what other actions can be performed on the resource. If this is not clear at the moment, don't worry, we will discuss this in a later video.
+
+There are 2 other constraints
+Layered System
+Code on Demand (optional)
+
+Difference between WCF and Web API. When to choose one over the other?
+WCF (Windows Communication Foundation) - One of the choices available in .NET for creating RESTful services is WCF. The problem with WCF is that, a lot of configuration is required to turn a WCF service into a RESTful service. The more natural choice for creating RESTful services is ASP.NET Web API, which is specifically created for this purpose.
+
+WCF is more suited for building services that are transport/protocol independent. For example, you want to build a single service, that can be consumed by 2 different clients - Let's say, a Java client and .NET client. Java client expects transport protocol to be HTTP and message format to be XML for interoperability, where as the .NET client expects the protocol to be TCP and the message format to be binary for performance. For this scenario WCF is the right choice. What we do here is create a single WCF service, and then configure 2 end points one for each client (i.e one for the Java client and the other for the .NET client). If you are new to WCF, please watch our WCF video series. I will have the link available in the description of this video.
+
+There is nothing wrong to use WCF to create RESTful services. It's just that it's a bit more complex and configuration can be a headache. If you are stuck with .NET 3.5 or you have an existing SOAP service you must support but want to add REST to reach more clients, then use WCF. 
+
+If you don't have the limitation of .NET 3.5 and you want to a create brand new restful service then use ASP.NET Web API.
+
+1) ASP.net web app -- web api
+2) in Fiddler : localhost:3355/api/values --->
+       TO POST ===> 	double click on api/values   -->   click composer	-->    drag 'api/values' to composer     --> set to POST     -->       In Request Body ==>  "New String" -->in above box write == Context-Type:application/json    -->                                        Execute
+       TO GET ===>   click new api/values	---> click composer  ---> set to GET   -->     Remove everything in Request Body      -->    execute    O/P : value0 , value1 , value2, New String
+       TO PUT ===>  xlick composer    --->    set PUT    --->     localhost:4453/api/values/2 (2 is index of string list)            ---> 	      In Request Body ==>  "Updated - New String" ---> execute
+       TO DELETE --->  click composer   --> set delete   -->     localhost:4453/api/values/2          ---> 	        In Request Body empty             --->                execute
+       TO GET in Xml/json ===> Accept : application/json --- fiddler
+Create App Now using Web api : 
+1) ASP.net web app -- web api by Name : WebApiEmployee
+2) create databse -- EmployeeDepartmentDatabase -- > table : tblEmployee( Id ,Firstname, lastname, gender,salary )
+3) Right click on solution -- >click new project -- click Class Library --> Name it by EmployeeDataAccess
+4) Right click on EmployeeDataAccess class and Add ADO.NET Entity Data Model and Name it EmployeeDataModel ---- follow rest steps and save by EmployeeDbEntities
+5) In WebApiEmployee 
+     5 .1) TO ADD REFERENCE : right click on References -- add reference and              select EmployeeDataAccess
+     5.2) TO ADD CONTROLLER : right click add controller -- > select WEB API 2              Controller- empty -- Name it  : EmployeesController.cs
+             
+             TO GET :
+             EmployeeController.cs : 
+             public IEnumerable<Employee> Get()
+             {
+	using( EmployeeDBEntities entities = new EmployeeDBEntities() )
+	{ 
+	       return entities.Employees.ToList();
+	}
+              }
+             public Employee Get( int id )
+             {
+	using( EmployeeDBEntities entities = new EmployeeDBEntities() )
+	{ 
+	       return entities.Employees.FirstOrDefault( e => e.ID == id );
+	}
+              }
+            TO POST:
+            
+6) From app.config file :
+Copy <add name = 'EntitiesDbEntities' connectionString = ' ---- - - - -- "
+TO Web.config under connection string
+          
+
+*** FromBody and FromUri	// Data retrived from request body , Data retrived from url body
+public HttpResponseMessage PUT( [FromBody] int id , [FromUri] tblEmployee  Employee)
+{
+}
+ // for id and empoyee --> FromUri
+localhost:8822/api/employee?id=1&FirstName=FN&LastName=LN&Gender=Male&Salary=5500
+
+// for id [From Body] and empoyee --> FromUri
+localhost:8822/api/employee?FirstName=FN&LastName=LN&Gender=Male&Salary=5500
+
+*** WEB API from Jquery
+jquery will not work if client and web api are not under same project.
+
+
+*** IIS deploy using Swagger
+1) make Asp.net core web app + web api 
+2) install Swashbuckle.AspNetCore 
+3) in startup.cs
+       public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddControllers();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebApiIIS", Version = "v1" });
+            });
+        }
+
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebApiIIS v1"));
+            }
+        }
+4) Open https://localhost:44382/swagger/index.html
+
+Now for IIS : 
+1) create project - webapi
+2) right click on project -- > click publish --> select folder --> select any folder and and publish.
+3) open IIS manager
+4) right click on site --> fill Name , select publish folder and hostname.
+5) go to applicaton tools -> right click on hostname and select .NET CLR version - No managed code.
+6) run -- > C:\\windows\System32\drivers\etc 
+	add 127.0.0.1 NAMEOFWEBSITE(address)
+
+
+ *** JOIN MULTIPLE TABLES
+1) Models - tblEmployee{
+[Key]
+        public int ID { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Gender { get; set; }
+        public int salary { get; set; }
+}
+2) Models - department.cs
+{
+ [Key]
+        public int ID { get; set; }
+        public string Name { get; set; }
+        public string Location { get; set; }
+}
+3) Models - empdept.cs
+{
+        public tblEmployee employeedetails { get; set; }
+        public tblDepartment departmentdetails { get; set; }
+}
+4) Now In Controller
+ public IActionResult Index()
+        {
+            List<tblEmployee> employeeData = _db.tblEmployee.ToList();
+            List<tblDepartment> departmentData = _db.tblDepartment.ToList();
+
+            var multipletable = from e in employeeData
+                                join d in departmentData on e.ID equals d.ID 
+                                select new EmpDept { employeedetails = e, departmentdetails = d };
+            return View(multipletable);
+        }   
+
+*** Sorting
+1) EmployeeListController.cs
+ public IActionResult Index(string sortOrder)
+        {
+            List<tblEmployee> employeeData = _db.tblEmployee.ToList();
+            List<tblDepartment> departmentData = _db.tblDepartment.ToList();
+
+            var multipletable = from e in employeeData
+                                join d in departmentData on e.ID equals d.ID
+                                select new EmpDept { FirstName = e.FirstName , LastName = e.LastName , salary = e.salary , Gender = e.Gender , departmentName = d.Name  };
+
+            ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "nameDesc" : "";
+            ViewData["SalarySortParam"] = sortOrder == "salary" ? "salaryDesc" : "salary";
+
+            switch(sortOrder)
+            {
+                case "nameDesc":
+                    multipletable = multipletable.OrderByDescending(s => s.FirstName);
+                    break;
+                case "salaryDesc":
+                    multipletable = multipletable.OrderByDescending(s => s.salary);
+                    break;
+                case "salary":
+                    multipletable = multipletable.OrderBy(s => s.salary);
+                    break;
+                default:
+                    multipletable = multipletable.OrderBy(s => s.FirstName);
+                    break;
+            }
+            return View(multipletable.ToList());
+        }
+2) Index.cshtml
+@model IEnumerable<Rehan.Models.EmpDept>
+<table class="table table-bordered table-striped" style="width:100%">
+        <thead>
+            <tr>
+                <th>
+                    <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParam"]">Employee First Name</a>
+                </th>
+                <th>
+                    Employee last Name  
+                </th>
+                <th>
+                    Gender
+                </th>
+                <th>
+                    <a asp-action="Index" asp-route-sortOrder="@ViewData["SalarySortParam"]">Salary</a>
+                </th>
+                <th>
+                    Department
+                </th>
+            </tr>            
+        </thead>
+        <tbody>
+
+*** FILTER
+1) Index.html
+ <form asp-action="Index" method="get">
+            <div class="form-check no-color">
+                <p>
+                    Find by Name : <input type="text" name="searchString" value="@ViewData["currentFilter"]"/>
+                    <input type="submit" value="search" class="btn btn-success"/>
+                    <a asp-action="Index" class="btn btn-dark"> Back to Employee List</a>
+                </p>
+            </div>
+        </form>
+
+2) EmployeeListController.cs
+public IActionResult Index(string sortOrder ,string searchString)
+        {
+            List<tblEmployee> employeeData = _db.tblEmployee.ToList();
+            List<tblDepartment> departmentData = _db.tblDepartment.ToList();
+
+            var multipletable = from e in employeeData
+                                join d in departmentData on e.ID equals d.ID
+                                select new EmpDept { FirstName = e.FirstName , LastName = e.LastName , salary = e.salary , Gender = e.Gender , departmentName = d.Name  };
+
+            ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "nameDesc" : "";
+            ViewData["SalarySortParam"] = sortOrder == "salary" ? "salaryDesc" : "salary";
+            ViewData["CurrentFilter"] = searchString;
+
+            if(!string.IsNullOrEmpty(searchString))
+            {
+                multipletable = multipletable.Where(s =>
+                                                    s.FirstName.Contains(searchString) ||
+                                                    s.LastName.Contains(searchString));
+            }
+ 
+*** PAGING : 
+
+
+*** Ajax
+https://www.youtube.com/watch?v=3r6RfShv8m8
+
+
+*** validate unique Email
+
+1) In StudentController.cs
+ // to check unique email
+        [HttpPost]
+        public JsonResult IsEmailExists( string email )
+        {
+            System.Threading.Thread.Sleep(200);
+            var searchData = _context.tblStudent.Where(x => x.Email == email).SingleOrDefault();
+            if (searchData != null)
+            {
+                return Json(0);
+            }
+            else
+            {
+                return Json(1);
+            }
+        }
+2) In Models - student
+ public class tblStudent
+    {      
+        [Key]
+        public int ID { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+
+        [Required]
+        [Remote("IsEmailExists", "Student", HttpMethod = "POST", ErrorMessage = "User name already exists. Please enter a different user name.")]
+        public string Email { get; set; }
+
+        public int StreamId { get; set; }
+    }
+3) in View - > Create page --> where form resides
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+*** Email not editable -- use readonly = "readonly"
+1) in edit.html
+<div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" readonly="readonly" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
