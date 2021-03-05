@@ -1,0 +1,11 @@
+
+********  form   ************
+    <form>
+        <div class="form-group">
+            <label for="firstName">First Name</label>
+            <input type="text" class="form-control">
+        </div>
+    </form>
+
+******* red message in box ********
+<div class="alert alert-danger" >Enter valid input </div>

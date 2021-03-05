@@ -1,0 +1,1009 @@
+// Node version --- npm -version
+// to install angular --- npm install -g @angular/cli
+// ng --version
+
+// to create new angular project and open
+    ng new projectName
+    cd projectName
+    ng serve
+
+***  TypeScript  *** 
+// to install ---  npm install -g typescript
+// to get version --- tsc --version
+// create main.ts     --> after compiling tsc main.ts     --> file is created main.js ( converted from typescript to javascript )
+
+//  let count = 4;
+    count = 'a';                    error
+    //solved
+    let count : any;
+    count = 4;
+    count = 'dsbfes';
+
+    let a : string;
+    let b : boolean;
+    let c : number;
+    let d : any;
+    let e : any[] = [ 1, true , 'a'];
+
+// Constant
+enum Color{ red = 0 , green = 1 , purple = 2 , blue = 3  } 
+
+// Type assertion
+let message = 'abc';
+let endsWith = (<string>message).endsWith('c');
+
+let lof = function(message)
+{
+    console.log(message);
+}
+// arrow function
+let delog = (message) =>
+{
+    console.log(message);
+}
+delog("dwyvfwe");
+
+// interface
+let drawPoint = ( point : { x : number , y : number}) =>
+{
+    console.log(point.x);
+}
+
+interface Point{
+    x : number,
+    y : number
+}
+let drawP = (point : Point) =>
+{
+    console.log(point.x);
+}
+
+//class
+class p
+{
+    x : number;
+    y : number;
+
+    draw()
+    {
+        console.log("asdvf");
+    }
+    drawWith( another : p)
+    {
+        console.log( another.x);
+    }
+}
+let obj = new p();
+obj.draw();
+
+//constructor and access modifier
+class cls
+{
+    // access modifier with constructor
+    constructor( private x ?: number , private y ?: number)
+    {
+    }
+    draw()
+    {
+        console.log("asdvf");
+    }
+    drawWith( another : p)
+    {
+        console.log( another.x);
+    }
+}
+let obj1 = new cls(1,2);
+let obj2 = new cls();           // No error
+obj.draw();
+
+// Get Set
+class cls2
+{
+    private x : number;
+    private y : number;
+    
+    constructor( x ?: number , y ?: number)
+    {
+
+    }
+    get X()
+    {
+        return this.x;
+    }
+    set X( value )
+    {
+        this.x = value;
+    }
+}
+
+let obj3 = new cls2( 1 , 2 );
+let val = obj3.X;       // get
+obj3.X = 32;            // even it is private, we can set the value.
+
+// Import Export
+import { cls3 } from './exportt';
+let obj4 = new cls3(1,2);
+obj4.draw();
+
+// to generating components
+1) In app
+    create courses.componenent.ts
+        import { Component } from '@angular/core'
+
+        @Component({
+            selector : 'courses',
+            template : '<h2>Courses23 - jfew</h2>'
+        })
+
+        export class CoursesComponent
+        {
+        }
+2) In app.module.ts
+import { CoursesComponent } from './courses.component'
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    CoursesComponent                // add this
+})
+export class AppModule { }
+
+3) in app.component.html
+        <courses>                   // on running app -->   o/p : Courses23 - jfew
+
+// Shortcut to create component
+    ng g c COMPONENT_NAME
+
+// template
+import { Component } from '@angular/core'
+
+@Component({
+    selector : 'courses',
+    template : `
+                <h2>
+                    {{ "Title :" + title }}
+                </h2>
+                <ul>
+                    <li *ngFor = "let c of courseList">
+                        {{ c }}
+                    </li>
+                </ul>                
+                `
+})
+
+export class CoursesComponent
+{
+    title = " List of components";
+    courseList = ["Angular" , "React" , ".NET"];
+    getTitle()
+    {
+        return this.title;
+    }
+}
+
+// SERVICES // ng g s Courses
+1) create Courses.service.ts
+    export class CoursesService
+    {
+        getCourses()
+        {
+            return ["course1" , "course2" , "course3"];
+        }
+    }
+2) in courses.component.ts
+    import { CoursesService } from './courses.service';
+    import { Component } from '@angular/core'
+
+    @Component({
+        selector : 'courses',
+        templateUrl : './courses.component.html'
+    })
+
+    export class CoursesComponent
+    {
+        title = " List of components";
+        courseList = ["Angular" , "React" , ".NET"];
+        course1;
+
+        // constructor()
+        // {
+        //     let service = new CoursesService();
+        //     this.course1 = service.getCourses();
+        // }
+
+        // Dependency injection ==> to add dependency -- that is to add parameter to the constructor
+        // to enable dependency -- add to app.module.ts --> providers: [ CoursesService ],
+        constructor( service : CoursesService)
+        { 
+            this.course1 = service.getCourses();
+        }
+    }
+3) to enable dependency injection
+    in app.module.ts
+    providers: [ CoursesService ],
+
+
+// PROPERTY BINDING
+    template :`
+        <h2> {{ title }} </h2>
+        <h2 [textContent] = "title"> </h2>      // property binding
+
+        <img src="{{ imageUrl }}" />
+        <img [src] = "Title" /> 
+        `
+    export class CourseContent
+    {
+        title = "list of companies";
+        imageUrl = "hrrps://image.com";
+    }
+// ATTRIBUTE BINDING  -- use [attr.]
+    template :`
+        <p [attr.colspan]> "Colspan" </p>
+        `
+    export class CourseContent
+    {
+        colspan = 2;        
+    }
+
+// install bootstrap
+npm install bootstrap --save
+
+IN Styles.class
+@import "`bootstrap/dist/css/bootstrap.css"
+
+// CLASS BINDING        -- [class.]
+    @component{
+        template : `
+                    <button class = 'btn btn-primary' [class.active]="isActive"> 
+    }
+    export class CourseContent
+    {
+        isActive = true;
+    }
+
+    // <button class='btn btn-primary active'/>
+    // isActive = false; <button class='btn btn-primary'/>
+
+// STYLE binding
+    template : `
+            <button [style.backgroundColor] = "isActive ? 'blue' : 'green'" />
+    `
+    export class CourseContent
+    {
+        isActive = true;
+    }
+
+// EVENT BINDING  -- use ()
+1) In courses.component.html
+    <button (click)="onSave()">Save</button>
+
+2) In Courses.component.ts
+    export class CoursesComponent
+    {
+        onSave()
+        {
+            console.log("Button was clicked");
+        }
+    }
+
+// 2) EVENT BINDING
+    template : `
+    <div (click)="onDivCLicked()">
+        <button (click) = "onSave($event)"> Save </button>
+    </div>`
+
+    export class CourseContent
+    {
+        onDivCLicked()
+        {
+            console.log("Div is clicked");
+        }
+        onSave($event)
+        {
+            console.log("Button is clicked" , $event ); 
+        }
+    }
+    // on a click   ===    div <- Button
+    button is clicked
+    event - { diwuf w[ofw ]}
+    div is clicked
+
+    // but to stop at OnSave event
+    use
+    OnSave()
+    {   
+        $event.stopPropagation();
+        console.log("Button was clicked");
+    }
+// EVENT Handling
+
+<input (keyUp.enter)="OnKeyUp()"/>      //On pressing enter
+
+export class CourseContent
+{
+    OnkeyUp()
+    {
+            console.log("Enter is pressed");
+    }
+}
+
+// TO GET INPUT FIELD ON A enter
+    <div>
+        <input (keyup.enter)="onKeyUp($event)" type="text" name="entername" id="">
+    </div>
+
+    export class CourseContent
+    {
+        onKeyUp($event)
+        {
+            console.log(event.target.value);
+        }
+    }
+// ANOTHER WAY
+    <div>
+        <input #email (keyup.enter)="onKeyUp(email.value)" type="text" name="entername">
+    </div>
+    export class CourseContent
+    {
+        email;
+        onKeyUp(email)
+        {
+            console.log(email);
+        }
+    }
+// ANOTHER WAY
+    export class CourseContent
+    {
+        email;
+        onKeyUp()
+        {
+            console.log(this.email);
+        }
+    }
+<input [value]="email" (keyUp.enter)="email = $event.target.value; onKeyUp3()">
+// TWo Way binding
+1) in courses.component.html
+    <div>
+        <input [(ngModel)]="email" (keyUp.enter) = "onKeyUp3()"/>
+    </div>
+2) In app.module.ts
+    import { FormsModule } from '@angular/forms';
+
+    @NgModule({    
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        FormsModule      // add
+    ],
+3) in coures.component.ts 
+    email = "dwf@gmail.com";
+    onKeyUp3()
+    {
+        console.log(this.email);
+    }
+O/P : sajkbd@bsd.com
+
+***  PIPES **************************
+1) In courses.component.html
+    <div style = "margin : 20px">
+        {{ course.title | lowercase | uppercase }} <br>
+        {{ course.rating | number }} <br>
+        {{ course.price | currency : 'INR' : true : '3.2-2'}} <br>
+        {{ course.students }} <br>
+        {{ course.releaseDate | date}} <br>
+    </div> 
+2) In courses.component.ts
+    course = {
+        title : "The complete ANGULAR COURSE",
+        rating : " 4.934",
+        students : 20123,
+        price : 190.25,
+        releaseDate : new Date (2016 , 3 , 1)
+    }
+
+**** Custom Pipes *************************
+1) In courses.component.html
+    <div style = "margin : 20px">
+        {{ text | summary }}
+        {{ text | summary : 10 }}       // to give parameter
+    </div> 
+
+2) In courses.component.ts
+    text = 'loetewf fewiufew ffwiuf fwiufew fwiufwiefwf wfiuwef wfuwif'
+
+3) Create summary.pipe.ts
+    import { Pipe , PipeTransform } from '@angular/core';
+
+    @Pipe({
+        name : 'summary'
+    })
+    export class SummaryPipe implements PipeTransform
+    {
+        transform(value: string, limit? : number )      // length depends on user -- if not provided length is 20 or limit
+        {
+            if( !value )
+                return null;
+            let actualLimit = limit;
+            return value.substr(0,actualLimit ? actualLimit : 20) + "...";
+        }
+    }
+
+4) In app.module.ts
+    import { SummaryPipe } from './courses/summary.pipe';
+    @NgModule({
+  declarations: [
+    AppComponent,
+    CoursesComponent,
+    CourseComponent,
+    SummaryPipe         --> add
+  ],
+
+****   COMPONENT API AND INPUT PROPERTIES  ********************
+
+1) Create favorite folder
+1.1) Create favourite.component.ts
+    import { AppComponent } from './../app.component';
+    import { Component, OnInit, Input } from '@angular/core';       // add Input 
+    import { from } from 'rxjs';
+    @Component({
+        selector: 'favorite',
+        templateUrl: './favorite.component.html',
+        styleUrls: ['./favorite.component.css'],
+        inputs :['isFavorite']          // add here OR above in importing field
+        })
+        export class FavoriteComponent implements OnInit {
+
+        @Input()                          // input prop
+        isFavorite? : boolean;
+
+        constructor() { 
+        }
+
+        ngOnInit(): void {
+        }
+
+        onClick1()
+        {
+            this.isFavorite = !this.isFavorite;
+        }
+    }
+    
+2) In app.module.ts
+    import { FavoriteComponent } from './favorite/favorite.component';
+
+    @NgModule({
+    declarations: [
+        AppComponent,
+        CoursesComponent,
+        CourseComponent,
+        SummaryPipe,
+        FavoriteComponent
+    ],
+
+3) In app.component.html
+    <favorite [isFavorite] = "post.isFavorite"></favorite>      //to set IsFavourite to true from app.componenent.ts ==> post{ isFavorite : true}
+
+4) In favorite.component.html
+    <head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    </head>
+    <span [class.btn-primary]="isFavorite"
+        [class.btn-secondary]="!isFavorite"
+        (click) = "onClick()" >SAVE
+    </span>
+
+// On clicking favorite icon isFavorite changes to !isFavorite  // buttom color changes on clicking
+// to provide alias to input property 
+@Input('is-Favorite') isSelected : boolean;
+
+******* OUTPUT PROPERTY ****
+
+1) In app.componenent.ts
+    export class AppComponent {
+    title = 'title';
+    post = {
+        isFavorite : true
+    }
+
+    onFavoriteChange()     // need to call this in another componenent, for this we need to create EventEmitter for output
+    {
+        console.log("Isfavorite has been changed");
+    }
+    }
+2) In app.component.html
+    <favorite [isFavorite] = "post.isFavorite" (change)="onFavoriteChange()"></favorite>    //passed argument isFavorite and onFavoriteChange
+
+3) In favorite.componenent.ts
+    import { AppComponent } from './../app.component';
+    import { Component, OnInit, Input , EventEmitter, Output } from '@angular/core';
+    import { from } from 'rxjs';
+
+    @Component({
+    selector: 'favorite',
+    templateUrl: './favorite.component.html',
+    styleUrls: ['./favorite.component.css'],
+    inputs :['isFavorite']
+    })
+    export class FavoriteComponent implements OnInit {
+        @Input() 
+        isFavorite? : boolean;
+
+        @Output()
+        change = new EventEmitter(); 
+
+        constructor() { 
+            // this.isFavorite = true;
+        }
+        onClick()
+        {
+            this.isFavorite = !this.isFavorite;
+            this.change.emit();
+        }        
+        ngOnInit(): void {
+        }
+    }
+4) In favorite.componenent.html
+    <span [class.btn-primary]="isFavorite"
+        [class.btn-secondary]="!isFavorite"
+        (click) = "onClick()" > SAVE
+    </span>
+
+// to post func from app.componenent.ts to favorite.component.ts we need a Eventemitter ( output)
+// to get func "" "" we need Input
+
+****** EVENT PASSING   ****************
+
+1) In app.componenent.ts
+    export class AppComponent {
+        title = 'title';
+        post = {
+            isFavorite : true
+        }
+
+        onFavoriteChange(isFavorite)      // need to call this in another componenent, for this we need to create EventEmitter for output
+        {
+            console.log("Isfavorite has been changed : " , isFavorite);
+        }
+    }
+2) In app.component.html
+    <favorite [isFavorite] = "post.isFavorite" (change)="onFavoriteChange($event)"></favorite>    //passed argument isFavorite and onFavoriteChange
+
+3) In favorite.componenent.ts
+    import { AppComponent } from './../app.component';
+    import { Component, OnInit, Input , EventEmitter, Output } from '@angular/core';
+    import { from } from 'rxjs';
+
+    @Component({
+    selector: 'favorite',
+    templateUrl: './favorite.component.html',
+    styleUrls: ['./favorite.component.css'],
+    inputs :['isFavorite']
+    })
+    export class FavoriteComponent implements OnInit {
+        @Input() 
+        isFavorite? : boolean;
+
+        @Output()
+        change = new EventEmitter(); 
+
+        constructor() { 
+            // this.isFavorite = true;
+        }
+        onClick()
+        {
+            this.isFavorite = !this.isFavorite;
+            this.change.emit(this.IsFavorite);         //pass arguments
+        }        
+        ngOnInit(): void {
+        }
+    }
+4) In favorite.componenent.html
+    <span [class.btn-primary]="isFavorite"
+        [class.btn-secondary]="!isFavorite"
+        (click) = "onClick()" > SAVE
+    </span>
+
+***** OUTPUT ALIAS *********
+@Output(alias-name)
+
+****  STYLES ***************
+    var el = document.querySelector('favorite');
+    el.innerHtml = `
+        <style> h1{ color : red } </style>
+        <h1> hello world </h1>
+        `;
+    
+1)  In favorite.componenent.ts 
+    import { components , ViewEncapsulation}
+    @componenent({
+        enacapsulation : ViewEncapsulation.Emulated     // its add the styles to old styles
+        enacapsulation : ViewEncapsulation.Native       // its Create a styles to Shadow Dom and We need add all old needed styles into it.
+        enacapsulation : none;
+    })
+
+************ ng-content **************************
+    used to decide which content should be placed where??
+    <ng-content select='.CLASS_NAME'></ng-content>
+
+    1) app.component.html
+        <appPanel>
+            <div class="heading">HEADER</div>
+            <div class="body">
+                <p>Rehan</p>
+                <p>Unthinkable solutions</p>
+            </div>
+        </appPanel>
+    2) panel.component.html
+        <div class="card ">
+            <div class="card-header">
+                <ng-content select='.heading'></ng-content>     // GET REPLACED WITH 'HEADER'-- <div></div>
+            </div>
+            <div class="card-body">
+                <ng-content select='.body'></ng-content>       // get replaced with body
+            </div>
+        </div>
+********** ng-container *************************
+    used to avoid creation of empty div's
+    if empty div are created, page's style will get disturbed
+
+1) app.component.html
+    <appPanel>
+        <ng-container class="heading">HEADER</ng-container>     //replace div with ng-container
+        <div class="body">
+            <p>Rehan</p>
+            <p>Unthinkable solutions</p>
+        </div>
+    </appPanel>
+2) panel.component.html
+    <div class="card ">
+        <div class="card-header">
+            <ng-content select='.heading'></ng-content>     
+        </div>
+        <div class="card-body">
+            <ng-content select='.body'></ng-content>
+        </div>
+    </div>
+
+ // in inspect
+    <div class='.card'>
+        <div class='.card-header> HEADER </div>     // using ng-container no divs is required
+
+        <div class='card-body>
+            <div class='.body> fbefiubf </div>      // using div it creates extra div so ng-container is used
+        </div>
+
+*****  ng-template   **********************
+ used to render html according to *ngIf and *ngFor
+1) Eg-1
+    <div *ngIf="courses.length > 0; ">
+        <p>courses List
+        </p>
+    </div>
+    <div *ngIf="courses.length == 0">
+        <p>No courses!!</p>
+    </div> 
+ O/P : inspect:
+    <div *ngIf="courses.length > 0; ">
+        <p>courses List
+        </p>
+    </div>
+ // What if Dont want div and we only want <p> courseList <p>   
+ 
+ 2) Eg - 2
+    <div *ngIf="courses.length > 0; then courseList else noCourseList"></div>
+    <ng-template #courseList>
+        <p>courses List</p>
+    </ng-template>
+    <ng-template #noCourseList>
+        <p>No-List</p>
+    </ng-template>
+O/P : inspect:
+    <p>course List<p>
+
+***** HIDDEN PROPERTIES ******************
+
+    <div [hidden]="courses.length > 0">
+        <p>course List</p>
+    </div>
+    <div [hidden]="courses.length == 0">
+        <p>No List</p>
+    </div>
+
+  Inspect : 
+    both div bill shown in inspect
+    when to use hidden / ng-template
+    hidden : use when DOM is small
+    ng-template : use when DOM is large
+
+******** ngSwitch  **********
+    <ul class="nav nav-tabs">
+        <li [class.active]="viewMode == 'map'"> <a (click)="viewMode = 'map'">Map View</a> </li>
+        <li [class.active]="viewMode == 'list'" ><a (click)="viewMode = 'list'"> List View</a> </li>
+    </ul>
+
+    <div [ngSwitch] = "viewMode">
+        <div *ngSwitchCase="'map'">Map view Content</div>
+        <div *ngSwitchCase="'list'">List View Case</div>
+        <div *ngSwitchDefault>Otherwise</div>
+    </div>
+O/P :
+Map View List View  // buttons, on clicking changes content
+Map view Content
+*********** ngFor  *********
+*ngFor="let course of couses"
+
+******** trackBy  ************
+ 1) app.compoonent.ts
+    trackSubs( index , subject)
+    {
+        return subject ? subject.id : undefined;
+    }
+ 2) <ul>
+        <li *ngFor="let sub of subjects; trackBy : trackSubs">
+            {{ sub.name}}
+        </li>
+    </ul>
+// trackby is used when data is large and its takes time to load it
+
+*****  ngClass  *******************************
+    // inside [ngClass] write all styles
+    <span class="gyphicon" [ngClass]="{ 'btn : "true" , active : "true"}"></span>
+
+*******        ngStyle      *******************
+    <button [style.color : "red"] 
+            [style.backgroundColor : "blue"] > SAVE 
+    </button>
+    // using ngStyle
+    <button [ngColor] = "{
+        color : "red",
+        background : "blue"
+    }"]> Save 
+    </button>
+
+*****   Custom directory ****
+1) ng g d input-format
+2) input-format.directive.ts
+    import { Directive , ElementRef, HostListener, Input} from '@angular/core';     // HostListener used to get all the input from the user
+
+    @Directive({
+    selector: '[appInputFormat]'
+    })
+    export class InputFormatDirective {
+
+    constructor( private el : ElementRef) { }       // used for input
+
+    @Input('format') format;            // input prop used to set the value of format
+    @HostListener('focus') OnFocus()    // hostlistener defined
+    {
+        if( this.format == 'lowerCase')
+        {
+            let value : string = this.el.nativeElement.value;
+            this.el.nativeElement.value = value.toLowerCase();
+        }
+        else{
+            let value : string = this.el.nativeElement.value;
+            this.el.nativeElement.value = value.toUpperCase();
+        }
+    }
+    }
+3) app.component.ts
+    <input type="text" appInputFormat [format] = "'lowerCase'">         //use appInputFormat selector used in directive
+
+******** FORMS  *********
+    for validation : 1) template driven form
+                     2) Reactive form
+    <form>
+    <div class="form-group">
+        <label for="firstName">First Name</label>
+        <input ngModel name="firstName" #firstName="ngModel" (change)="log(firstName)" id="firstName" type="text" class="form-control">
+    </div>
+    <div class="form-group">
+        <label for="lastName">Last Name</label>
+        <input type="text" id="lastName" class="form-control">
+    </div>
+    <button class="btn btn-primary">Submit</button>
+    </form>
+
+
+*****  NgModel in forms *************
+ used to control forms
+in inspect : On providing name in input field 
+    NgModel {_rawValidators: Array(0), _rawAsyncValidators: Array(0), _onDestroyCallbacks: Array(2), _parent: NgForm, name: "firstName", …}
+    control: FormControl {_hasOwnPendingAsyncValidator: false, _parent: FormGroup, pristine: false, touched: true, _onCollectionChange: ƒ, …}
+    model: ""
+    name: "firstName"
+    update: EventEmitter_ {_isScalar: false, observers: Array(0), closed: false, isStopped: false, hasError: false, …}
+    valueAccessor: DefaultValueAccessor {_renderer: EmulatedEncapsulationDomRenderer2, _elementRef: ElementRef, _compositionMode: true, onChange: ƒ, onTouched: ƒ, …}
+    viewModel: "swqd"
+    __ngContext__: LComponentView_ContactComponent(87) [contact, TView, 147, LComponentView_AppComponent(211), null, null, TNode, LCleanup(14), ContactComponent, {…}, DomRendererFactory2, EmulatedEncapsulationDomRenderer2, null, null, null, LComponentView_AppComponent(211), LComponentView_ContactComponent(87), null, 0, null, form.ng-valid.ng-dirty.ng-touched, div.form-group, label, text, input#firstName.form-control.ng-valid.ng-dirty.ng-touched, NgModel, div.form-group, label, text, input#lastName.form-control, button.btn.btn-primary, text, 2049, 0, 0, 0, 0, 0, 0, 0, 65737, NgForm, ɵNgNoValidate, NgControlStatusGroup, NgForm, false, false, true, true, false, false, true, true, true, true, false, false, false, false, 1968129, 0, 0, 0, 0, 0, 0, 0, 32, Array(1), NgModel, DefaultValueAccessor, NgControlStatus, NgModel, false, false, true, true, false, false, true, true, true, true, false, false, false, false, debug: LViewDebug]
+    __ngSimpleChanges__: {previous: {…}, current: null}
+    _composedAsyncValidatorFn: null
+    _composedValidatorFn: null
+    _onDestroyCallbacks: (2) [ƒ, ƒ]
+    _parent: NgForm {_rawValidators: Array(0), _rawAsyncValidators: Array(0), _onDestroyCallbacks: Array(0), submitted: true, _directives: Array(1), …}
+    _rawAsyncValidators: []
+    _rawValidators: []
+    _registered: true
+    asyncValidator: null
+    dirty: true             // meaning that the user has changed the value in the UI. 
+    disabled: false
+    enabled: true
+    errors: null
+    formDirective: NgForm
+    invalid: false
+    path: Array(1)
+    pending: false
+    pristine: false         //meaning that the user has not yet changed the value in the UI.
+    status: (...)
+    statusChanges: (...)
+    touched: true
+    untouched: false
+    valid: true
+    validator: (...)
+    value: (...)
+    valueChanges: (...)
+
+    1) contact.component.html
+        <input ngModel name="firstName" #firstName="ngModel" (change)="log(firstName)" id="firstName" type="text" class="form-control">
+        // in input [(ngModel)]="firstName" is written as ngModel name="firstName"
+        // #firstName="ngModel" is template in which ngModel resides
+        // onchange event calls log(x)
+    2) contact.componenent.ts
+        export class ContactComponent{
+            log(X)
+            {
+                console.log(X);
+            }
+        }
+*********  ngSubmit **********
+       <form #f="ngForm" (ngSubmit)="submit(f)">
+       </form>
+*********  ngForm  ******************
+     <form #f="ngForm" (ngSubmit)="submit(f)">
+     </form>
+     // it creates all the DOM in inspect
+**********    input field alert    ********************
+    <input required ngModel name="firstName" #firstName="ngModel" (change)="log(firstName)" id="firstName" type="text" class="form-control">
+    <div class="alert alert-danger" *ngIf="firstName.touched && !firstName.valid">Enter your name</div>
+
+    // if user move on without providing input then
+
+*********   Specific validation error      ********
+    <input required minlength='3' pattern="banana" ngModel name="firstName" #firstName="ngModel" (change)="log(firstName)" id="firstName" type="text" class="form-control">
+    <div class="alert alert-danger" *ngIf="firstName.touched">
+        <div *ngIf="firstName.errors?.required> first name is required " <div>
+        <div *ngIf="firstName.errors?.minlength"> minlength is 3 </div>
+        <div *ngIf="firstName.errors?.pattern"> pattern doesn't match </div>
+    </div>
+
+ 1) contact.component.ts
+    export class ContactComponent{
+        submit(f)
+        {
+            console.log(f);
+        }
+    }
+ 2) contact.component.html
+    <form #f="ngForm" (ngSubmit)="submit(f)">
+        <div class="form-group">
+            <label for="firstName">First Name</label>
+            <input required ngModel name="firstName" #firstName="ngModel" (change)="log(firstName)" id="firstName" type="text" class="form-control">
+            <div class="alert alert-danger" *ngIf="firstName.touched && !firstName.valid">Enter your name</div>
+        </div>
+        <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input type="text" id="lastName" class="form-control">
+        </div>
+        <button class="btn btn-primary">Submit</button>
+    </form>
+
+***********  ngModelGroup   ***********************
+    Creates and binds a FormGroup instance to a DOM element.
+    basically, it is a child of ngForm
+
+ 1) contact.component.html
+    <form #f="ngForm" (ngSubmit)="submit(f)">
+        <div ngModelGroup="contact" #contact="ngModelGroup">    // inside a ngForm
+            <div *ngIf="!contact.valid"> Error </div>
+        </div>
+        <div class="form-group">
+            <label for="firstName">First Name</label>
+            <input required ngModel name="firstName" #firstName="ngModel" (change)="log(firstName)" id="firstName" type="text" class="form-control">
+            <div class="alert alert-danger" *ngIf="firstName.touched && !firstName.valid">Enter your name</div>
+        </div>
+        <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input type="text" id="lastName" class="form-control">
+        </div>
+        <button class="btn btn-primary">Submit</button>
+    </form>
+
+    inspect :
+        ngModelGroup 
+            ewr : 
+            weff : 
+            dwfwf : 
+    diff : ngForm/ ngModelGroup
+        ngForm : contains all elements of form Dom
+        ngModelGroup : does contain output
+
+*****   Disable the submit button -- unless form is filled/ VALID      ******************
+    <button class="btn btn-primary" [disabled]="!f.valid">Submit</button>
+
+***** CheckBox  ********
+
+    <form #f="ngForm" (ngSubmit)="submit(f)">
+        <div class="form-group">
+            <label for="firstName">First Name</label>
+            <input required minlength='3' pattern="banana" ngModel name="firstName" #firstName="ngModel" (change)="log(firstName)" id="firstName" type="text" class="form-control">
+            <div class="alert alert-danger" *ngIf="firstName.touched">
+                <div *ngIf="firstName.errors?.required"> first name is required</div>
+                <div *ngIf="firstName.errors?.minlength"> minlength is 3 </div>
+                <div *ngIf="firstName.errors?.pattern"> pattern doesn't match </div>
+            </div>
+            <!-- CheckBox -->
+            <div class="checkBox">
+                <label > Subsribe to the course
+                    <input type="checkbox" ngModel name="isSubscribed">
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input ngModel name="lastName" type="text" id="lastName" class="form-control">
+        </div>
+        <!-- convert to json using pipe -->
+        <p>
+            {{ f.value | json }}
+        </p>
+        <button class="btn btn-primary" [disabled]="!f.valid">Submit</button>
+    </form>
+
+******   DROP DOWN LIST **********
+1) contact.component.html
+
+    <div class="form-group">
+        <label for="ContactMethod">Contact Method</label>
+        <select ngModel name="ContactMethod" id="contactMethod">
+            <option *ngFor="let method of contactList" [value]="method.id">{{ method.name }}</option>
+        </select>
+    </div>
+     <p>
+        {{ f.value | json }}      // O/P : { "firstName": "banana", "isSubscribed": true, "ContactMethod": "1", "lastName": "dbqwd" }
+    </p>
+2) contact.componenent.ts
+    contactList = [{
+        id : 1,
+        name : "Email"
+    },
+    {
+        id : 2,
+        name : "Phone"
+    }];
+
+    // TO GET O/P : contactMethod 's object
+    { "firstName": "banana", "isSubscribed": true, "ContactMethod": { "id": 1, "name": "Email" }, "lastName": "kjswq" }
+
+    // replace value with ngValue
+    <select ngModel name="ContactMethod" id="contactMethod">
+            <option *ngFor="let method of contactList" [ngValue]="method">{{ method.name }}</option>
+    </select>
+
+*****   RAdio    ************
+1) contact.component.html
+    <div *ngFor="let method of contactList" class="radio">
+        <label >
+            <input ngModel type="radio" name="courseList" [value]="method.id">
+            {{ method.name }}
+        </label>
+    </div>
+2) contact.component.ts
+    contactList = [{
+        id : 1,
+        name : "Email"
+    },
+    {
+        id : 2,
+        name : "Phone"
+    }];
+
